@@ -1,0 +1,531 @@
+<html>
+
+<head>
+    <base target="_top">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Shadows+Into+Light&display=swap" rel="stylesheet">
+
+
+    <!-- 引入 jsPDF 和 jsPDF SVG 插件 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 20px;
+        }
+
+        input,
+        button,
+        select {
+            margin: 5px;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        #error {
+            color: red;
+        }
+
+        #success {
+            color: green;
+        }
+
+        .helvetica {
+            font-family: 'Helvetica', sans-serif;
+        }
+
+        .container-query {
+            margin: 0 20px 20px 0;
+        }
+
+        .cap {
+            text-transform: uppercase;
+        }
+
+        .b {
+            font-weight: bold;
+        }
+
+        .title {
+            font-size: 180%;
+            margin: 0.6em 0 0.2em 0;
+        }
+
+        .thcolor {
+            color: rgb(46 147 60);
+        }
+
+        .rotate {
+            transform: rotate(180deg);
+            transform-origin: center;
+        }
+
+        .section {
+            width: 90vw;
+            aspect-ratio: 37 / 200;
+            padding: 2vw 4.6vw 0 4.6vw;
+            font-size: 3.5vw;
+            overflow: hidden;
+        }
+
+        .half {
+            height: 45%;
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+        }
+
+        .half::before {
+            content: attr(data-nomchinois);
+            position: absolute;
+            top: 70%;
+            right: 90vw;
+            font-size: 7em;
+            color: rgba(0, 0, 0, 0.08);
+            z-index: 0;
+            pointer-events: none;
+            transform: rotate(180deg);
+            transform-origin: right;
+            font-family: 'STXingkai', '华文行楷', 'ZCOOL KuaiLe', cursive;
+        }
+
+        .icon {
+            height: 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .icon img {
+            width: 22%;
+            aspect-ratio: 1 / 1;
+        }
+
+        .poids {
+            height: 2.4%;
+            font-size: 2em;
+            margin: 0 5%;
+            position: relative;
+        }
+
+        #bio-image {
+            display: block;
+            width: 60%;
+            height: 25vw;
+            aspect-ratio: 1 / 1;
+            top: 0;
+            left: 0;
+            background-size: cover;
+            position: absolute;
+        }
+
+        .effet {
+            border-top: 1.2vw solid rgb(46 147 60);
+            border-bottom: 1.2vw solid rgb(46 147 60);
+            height: 5%;
+            margin: 0 5%;
+            display: flex;
+            align-items: center;
+            font-size: 2.5em;
+            line-height: 1.2em;
+        }
+
+        .nom {
+            height: 12%;
+            margin: 0 5%;
+            display: flex;
+            align-items: flex-end;
+            font-size: 2em;
+            line-height: 1.2em;
+            font-weight: 500;
+        }
+
+        .codecouleur {
+            margin: 0 5%;
+            height: 18%;
+            background-color: rgb(46 147 60);
+        }
+
+        .codecouleur .siteweb {
+            color: #ffffff;
+            text-align: center;
+        }
+
+        .logo {
+            margin: 13.75% 5%;
+            height: 2.9%;
+        }
+
+        .logo img {
+            width: 100%;
+        }
+
+        .barre {
+            display: flex;
+            font-size: 1em;
+            height: 19.4%;
+        }
+
+        .barre .center {
+            width: 30%;
+            font-size: 1.2em;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            background-color: #ccc;
+            transform: rotate(-90deg);
+            transform-origin: center;
+        }
+
+        .barre .left {
+            width: 30%;
+            white-space: nowrap;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            transform: rotate(-90deg);
+            transform-origin: center;
+        }
+
+        .barre .right {
+            width: 65%;
+            padding-right: 5%;
+        }
+
+        .codebarre {
+            height: 70%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .codebarre img {
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+        }
+
+        .prix {
+            padding-left: 1.2em;
+        }
+
+        .placeholder {
+            min-height: 13%;
+        }
+
+        .short {
+            display: none;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!------- begin query ------->
+    <div class="container-query noprint">
+        <h1>AB Générateur d'étiquettes | 小药包标签生成器</h1>
+        <div id="labels-container"></div>
+        <div id="success"></div>
+        <div id="error"></div>
+        <div id="error2"></div>
+        <!-- Formulaire de recherche -->
+        <p>Saisissez le SKU et le LOT | 输入SKU和LOT:</p>
+        <input type="text" id="sku" placeholder="SKU du produit">
+        <input type="text" id="lot" placeholder="Lot dynamique s'il en a">
+        <label for="showPrice">Prix | 是否显示价格:</label>
+        <select id="showPrice">
+            <option value="yes">Oui</option>
+            <option value="no">Non</option>
+        </select>
+
+        <button onclick="generateAllLabels()">Télécharger le PDF</button>
+        <button onclick="searchProduct()">Générer</button>
+
+        <button onclick="generatePDF()">Télécharger PDF</button>
+
+
+
+    </div>
+    <!------- end query ------->
+
+    <!------- begin label ------->
+
+    <div class="section">
+        <div class="half">
+
+            <div class="subsection barre rotate">
+                <div class="left b helvetica">
+                    <div class="lot">LOT : <span id="product-lot"></span></div>
+                    <div class="dlc">DLC : </strong><span id="product-dlt"></span></div>
+                </div>
+                <div class="right">
+                    <div class="placeholder">
+                        <div id="product-price-container" class="prix helvetica" style="display:none;">
+                            <span class="b">Prix : </span><span id="product-prix"></span> €
+                        </div>
+                    </div>
+                    <div class="codebarre"><img id="product-codebarre" alt="Code Barre" /></div>
+
+                </div>
+            </div>
+            <div class="subsection siteweb2 rotate">
+                <div class="cap title b thcolor">www.calebasse.com</div>
+            </div>
+            <div class="subsection marque rotate">
+                <div class="cap title b thcolor">Le Laboratoire Calebasse</div>
+                <div class="info helvetica long">Établi à Paris depuis 1997, le Laboratoire Calebasse propose des
+                    plantes et
+                    compléments alimentaires de qualité.
+                    100% naturels, la priorité est donnée à l'efficacité et la sécurité. Des contrôles sont effectués
+                    sur chaque
+                    lot pour vérifier l'exemption des pesticides et métaux lourds, ainsi que la conformité à la
+                    Pharmacopée.Nos
+                    formules inspirées de la Médecine Traditionnelle Chinoise et perfectionnées par les études modernes,
+                    offrent
+                    une synergie équilibrée entre la richesse de la nature et la science moderne.</div>
+                <div class="info helvetica short">Établi à Paris depuis 1997, le Laboratoire Calebasse propose des
+                    plantes et
+                    compléments alimentaires de qualité.
+                    100% naturels, la priorité est donnée à l'efficacité et la sécurité. Des contrôles sont effectués
+                    sur chaque
+                    lot pour vérifier l'exemption des pesticides et métaux lourds, ainsi que la conformité à la
+                    Pharmacopée.</div>
+            </div>
+
+            <div class="subsection utilisation rotate">
+                <div class="cap title b thcolor">Conseil d'utilisation</div>
+                <div class="info helvetica"><span id="product-utilisation"></span>
+                </div>
+            </div>
+            <div class="subsection vertus rotate">
+                <div class="cap title b thcolor">Vertus</div>
+                <div class="info helvetica"><span id="product-vertus"></span>
+                </div>
+            </div>
+            <div class="subsection composition rotate">
+                <div class="cap title b thcolor">Composition</div>
+                <div class="info helvetica"><span id="product-composition"></span></div>
+            </div>
+        </div>
+        <div class="subsection codecouleur" id="product-couleur">
+            <div class="siteweb b">
+                <div class="rotate"> </div>
+            </div>
+        </div>
+        <div class="subsection flag">
+            <div class="blue"></div>
+            <div class="white"></div>
+            <div class="red"></div>
+        </div>
+        <div class="subsection logo">
+            <img src="https://res.cloudinary.com/laboratoire-calebasse/image/upload/v1730111412/Fichier_3_68a574cf12.png"
+                alt="Logo" />
+        </div>
+        <div class="subsection nom cap"><span id="product-nom"></span></div>
+        <div class="subsection effet cap b thcolor" id="effet-border"><span id="product-effets"></span></div>
+        <div class="subsection poids cap b" id="poids-bio"><span id="product-poids"></span><img id="bio-image"
+                alt="bio image" />
+        </div>
+        <div class="subsection icon">
+            <img id="icon-1" alt="Icon 1" />
+            <img src="https://res.cloudinary.com/laboratoire-calebasse/image/upload/v1728985812/icone_naturelle_dbf804d94e.png"
+                alt="Icon 2" />
+            <img src="https://res.cloudinary.com/laboratoire-calebasse/image/upload/v1728985813/icone_sans_022ef2fd1a.png"
+                alt="Icon 3" />
+            <img src="https://res.cloudinary.com/laboratoire-calebasse/image/upload/v1728985813/icone_pharmacope_5a910b1319.png"
+                alt="Icon 4" />
+        </div>
+    </div>
+
+    <!------- end label ------->
+
+    <script>
+        let products = [];
+
+        // Charger le fichier JSON
+        fetch('data.json')
+            .then(response => response.json())
+            .then(data => {
+                products = data;
+                console.log('Données chargées:', products);  // Affiche toutes les données du fichier JSON
+            })
+            .catch(error => console.error('Erreur lors du chargement des données :', error));
+
+        // Fonction de recherche du produit par SKU
+        function searchProduct() {
+            let sku = document.getElementById('sku').value;
+            sku = sku.replace(/\s+/g, '').toUpperCase(); // Enlever les espaces et mettre en majuscules
+            let lot = document.getElementById('lot').value;
+            let showPrice = document.getElementById('showPrice').value === 'yes';
+            console.log('Recherche pour SKU:', sku);  // Affiche SKU recherché
+
+            // Chercher le produit correspondant au SKU
+            let product = products.find(p => {
+                console.log('Comparaison SKU:', p.sku, 'avec', sku);
+                return p.sku === sku;
+            });
+
+            if (product) {
+                displayResult(product, lot, showPrice);
+                document.getElementById('success').innerText = `Produit trouvé avec le SKU (${sku})`;
+                document.getElementById('error').innerText = '';
+            } else {
+                document.getElementById('error').innerText = `Aucun produit trouvé avec le SKU (${sku})`;
+                document.getElementById('success').innerText = '';
+                clearResult();
+            }
+        }
+
+        // Fonction pour afficher les résultats du produit
+        function displayResult(product, lot, showPrice) {
+            document.getElementById('product-nom').innerText = product.nom;
+            document.getElementById('product-effets').innerText = product.effets;
+            document.getElementById('product-poids').innerText = product.poids;
+            document.getElementById('product-vertus').innerText = product.vertus;
+            document.getElementById('product-composition').innerText = product.composition;
+            document.getElementById('product-utilisation').innerText = product.utilisation;
+            document.getElementById('product-dlt').innerHTML = generateDate(); // Affiche DLT (date + 3 ans)
+            document.getElementById('bio-image').src = product.bio;
+            document.getElementById('icon-1').src = product.icon;
+
+            if (lot) {
+                document.getElementById('product-lot').innerHTML = lot; // Display Lot from the page input
+            } else {
+                document.getElementById('product-lot').innerHTML = product.lot; // Display Lot from JSON
+            }
+
+            // Afficher ou cacher le prix selon l'option choisie
+            if (showPrice && product.prix) {
+                document.getElementById('product-prix').innerHTML = product.prix;
+                document.getElementById('product-price-container').style.display = 'block';  // Show the price section
+            } else {
+                document.getElementById('product-price-container').style.display = 'none';   // Hide the price section
+            }
+
+            // Affiche l'image du code barre
+            document.getElementById('product-codebarre').src = product.codebarre;
+
+            // Affiche le bloc de couleur
+            document.getElementById('product-couleur').style.backgroundColor = product.couleur;
+
+            var elements = document.querySelectorAll('.thcolor');
+            elements.forEach(function (element) {
+                element.style.color = product.couleur;
+            });
+
+            // Modifier la couleur du border
+            var borderDiv = document.getElementById('effet-border');
+            borderDiv.style.borderTopColor = product.couleur;
+            borderDiv.style.borderBottomColor = product.couleur;
+
+            // Affiche bio image si nécessaire
+            if (product.bio === 'Y') {
+                document.getElementById('poids-bio').classList.add('bio-yes');
+            } else {
+                document.getElementById('poids-bio').classList.remove('bio-yes');
+            }
+
+            // Ajouter le nom chinois comme fond
+            document.querySelector('.half').setAttribute('data-nomchinois', product.nomchinois);
+
+            // Gérer l'affichage de la marque
+            if (product.brand === 'long') {
+                document.querySelector('.long').style.display = 'block';
+                document.querySelector('.short').style.display = 'none';
+            } else if (product.brand === 'court') {
+                document.querySelector('.long').style.display = 'none';
+                document.querySelector('.short').style.display = 'block';
+            }
+
+            // Vider les erreurs
+            document.getElementById('error').innerText = "";
+        }
+
+        // Fonction pour générer la date actuelle + 3 ans, format MM/YYYY
+        function generateDate() {
+            var currentDate = new Date();
+            var futureYear = currentDate.getFullYear() + 3;
+            var month = (currentDate.getMonth() + 1).toString().padStart(2, '0'); // Mois formaté en deux chiffres
+            return month + '/' + futureYear;
+        }
+
+        // Fonction pour vider les champs de résultats
+        function clearResult() {
+            document.getElementById('product-nom').innerText = "";
+            document.getElementById('product-effets').innerText = "";
+            document.getElementById('product-poids').innerText = "";
+            document.getElementById('product-vertus').innerText = "";
+            document.getElementById('product-composition').innerText = "";
+            document.getElementById('product-utilisation').innerText = "";
+            document.getElementById('product-lot').innerText = "";
+            document.getElementById('product-dlt').innerText = "";
+            document.getElementById('product-prix').innerText = "";
+            document.getElementById('product-price-container').style.display = 'none';
+            document.getElementById('product-codebarre').src = "";
+            document.getElementById('product-couleur').style.backgroundColor = "#ffffff";
+            document.getElementById('bio-image').src = "";
+            document.getElementById('icon-1').src = "";
+        }
+
+        // Fonction pour générer le PDF
+        function generatePDF() {
+            const { jsPDF } = window.jspdf;
+
+            const sectionElement = document.querySelector('.section');
+            const sectionWidthPx = sectionElement.offsetWidth;
+            const sectionHeightPx = sectionElement.offsetHeight;
+
+            const pxToMm = 25.4 / 96;
+            const pdfWidth = sectionWidthPx * pxToMm;
+            const pdfHeight = sectionHeightPx * pxToMm;
+
+            const doc = new jsPDF({
+                orientation: 'portrait',
+                unit: 'mm',
+                format: [pdfWidth, pdfHeight]
+            });
+
+            html2canvas(sectionElement, {
+                scale: 1,
+                useCORS: true, // Pour éviter les problèmes de CORS
+                logging: true // Pour faciliter le debug
+            }).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+
+                const currentDate = getCurrentDate();
+                const fileName = `${currentDate}.pdf`;
+
+                doc.save(fileName);
+            });
+        }
+
+        // Fonction pour obtenir la date actuelle + les informations produit
+        function getCurrentDate() {
+            var sku = document.getElementById('sku').value;
+            var currentDate = new Date();
+            var year = currentDate.getFullYear();
+            var month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+            var day = currentDate.getDate().toString().padStart(2, '0');
+            const nom = document.getElementById('product-nom').innerText || '';
+            const nomChinois = document.querySelector('.half').getAttribute('data-nomchinois');
+            const poids = document.getElementById('product-poids').innerText || '';
+            let price;
+            if (document.getElementById('showPrice').value === 'yes') {
+                price = '有价';
+            } else {
+                price = '无价';
+            }
+            return `${nomChinois}-${nom}-${price}-${poids}-${sku}-${year}-${month}-${day}`;
+        }
+
+    </script>
+
+</body>
+
+</html>

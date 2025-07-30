@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Shadows+Into+Light&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 20px;
+        }
+
+        input,
+        button,
+        select {
+            margin: 5px;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        #error {
+            color: red;
+        }
+
+        #success {
+            color: green;
+        }
+
+        .helvetica {
+            font-family: 'Helvetica', sans-serif;
+        }
+
+        .container-query {
+            margin: 0 20px 20px 0;
+        }
+
+        .cap {
+            text-transform: uppercase;
+        }
+
+        .b {
+            font-weight: bold;
+        }
+
+        .title {
+            font-size: 2.55rem;
+            margin: 0.6em 0 0.25em 0;
+        }
+
+        .thcolor {
+            color: #5DBD98;
+        }
+
+        .rotate {
+            transform: rotate(180deg);
+            /* 顺时针旋转180度 */
+            transform-origin: center;
+            /* 旋转的中心点为元素的中心（默认） */
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .section {
+            width: 90vw;
+            aspect-ratio: 37 / 200;
+            padding: 2vw 4.6vw 0 4.6vw;
+            /* border:1px solid #cccccc; 
+border-radius:1.8vw;*/
+            font-size: 8rem;
+            overflow: hidden;
+            margin: -2%;
+        }
+
+        .half {
+            height: 45%;
+            overflow: hidden;
+            position: relative;
+            /* 确保伪元素能够相对于这个 div 定位 */
+            z-index: 1;
+            /* 确保内容在伪元素上方 */
+        }
+
+        .chinese {
+            position: absolute;
+            bottom: 1.3%;
+            right: 90vw;
+            font-size: 8.5rem;
+            color: rgba(0, 0, 0, 0.08);
+            z-index: 0;
+            pointer-events: none;
+            transform: rotate(180deg);
+            transform-origin: right;
+            font-family: 'GenKiMin2 TC', sans-serif;
+        }
+
+        .quarter {
+            width: 100%;
+            aspect-ratio: 35 / 49;
+            overflow: hidden;
+        }
+
+        .icons {
+            display: flex;
+        }
+
+        .icon img {
+            width: 100%;
+            display: inline-block;
+        }
+
+        .poids {
+            height: 4.95%;
+            font-size: 3.3rem;
+            margin: 3.71% 5%;
+            position: relative;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .poids::after {
+            content: '';
+            position: absolute;
+            display: none;
+            /* 默认不显示 */
+        }
+
+        /* 当 bio 是 Y 时，显示图片 */
+        #bio-image {
+            display: block;
+            width: 49%;
+            top: 0;
+            right: 0%;
+            background-size: cover;
+            position: absolute;
+        }
+
+        .effet {
+            border-top: 1.2vw solid #5DBD98;
+            border-bottom: 1.2vw solid #5DBD98;
+            height: 5%;
+            margin: 0 5%;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            font-size: 3.7rem;
+            /* word-break: break-all; 
+hyphens: auto;  自动插入连字符 */
+            white-space: normal;
+            /* 允许正常换行 */
+            line-height: 1.2em;
+            font-weight: 800;
+        }
+
+
+        .nom {
+            height: 12%;
+            margin: 5% 5%;
+            display: flex;
+            align-items: flex-end;
+            overflow: hidden;
+            font-size: 6rem;
+            /* 设置字体大小范围：最小12px，最大20px */
+            /*word-break: break-word; 
+  hyphens: auto;  自动插入连字符 */
+            white-space: normal;
+            /* 允许正常换行 */
+            line-height: 1em;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+        }
+
+        .codecouleur {
+            margin: 4% 5%;
+            height: 18%;
+            background-color: rgb(46 147 60);
+        }
+
+        .codecouleur .siteweb {
+            /* background-color:rgb(46 147 60); */
+            color: #ffffff;
+            text-align: center;
+        }
+
+        .flag {
+            display: flex;
+            height: 0.7%;
+            margin: 0 5%;
+        }
+
+        .blue,
+        .white,
+        .red {
+            width: 33.3333333%;
+        }
+
+        .blue {
+            background-color: #0055A4;
+        }
+
+        .white {
+            background-color: #ffffff;
+        }
+
+        .red {
+            background-color: #EF4135;
+        }
+
+        .logo {
+            margin: 10.75% 5%;
+            height: 2.9%;
+        }
+
+        .logo img {
+            width: 100%;
+        }
+
+        .barre {
+            display: flex;
+            font-size: 2rem;
+            height: 19.4%;
+        }
+
+        .barre .center {
+            width: 30%;
+            font-size: 0.8em;
+            white-space: nowrap;
+            display: flex;
+            /* 使用 flexbox 布局 */
+            align-items: center;
+            /* 垂直方向居中 */
+            background-color: #ccc;
+            transform: rotate(-90deg);
+            /*  逆时针旋转90度 */
+            transform-origin: center
+                /* 设置旋转的中心点为元素的中心（默认） */
+        }
+
+        .line-height {
+            line-height: 1.1;
+        }
+
+        .contact {
+            display: flex;
+        }
+
+        .contact .typo {
+            width: 20%;
+        }
+
+        .contact .typo img {
+            height: 60%;
+            width: 100%;
+            margin-top: 5%;
+        }
+
+        .contact .info {
+            width: 100%;
+            font-size: 1.9rem;
+            line-height: 2.35em;
+            margin-top: 3%;
+            margin-left: 2%;
+        }
+
+        .composition .info,
+        .vertus .info,
+        .utilisation .info {
+            font-size: 1.85rem;
+        }
+
+        .info {
+            font-size: 1.85rem;
+            line-height: 1.15em;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .contact .info .adress-space-mail {
+            line-height: 130%;
+        }
+
+        .barre .left {
+            width: 30%;
+            white-space: nowrap;
+            display: flex;
+            /* 使用 flexbox 布局 */
+            flex-direction: column;
+            /* 子元素垂直排列 */
+            justify-content: center;
+            /* 子元素在垂直方向居中 */
+            transform: rotate(-90deg);
+            /*  逆时针旋转90度 */
+            transform-origin: center
+                /* 设置旋转的中心点为元素的中心（默认） */
+
+        }
+
+        .barre .right {
+            width: 65%;
+            padding-right: 5%;
+        }
+
+        .codebarre {
+            /* background-image: url("https://res.cloudinary.com/laboratoire-calebasse/image/upload/v1725957144/3665346169230_Yi_Yi_Ren_Chao_Larmes_de_Job_Coix_lacryma_jobi_100cp_1800ad6a65.png"); */
+            height: 70%;
+            /* background-size: 100% auto; 背景图片宽度适应 div 宽度，高度自动 */
+            /*background-position: bottom;  背景图片从底部开始显示 */
+            /* background-repeat: no-repeat; 防止背景图片重复 */
+            overflow: hidden;
+            /* 隐藏超出部分 */
+            position: relative;
+            /* 使子元素可以绝对定位 */
+        }
+
+        .codebarre img {
+            width: 100%;
+            /* 图片宽度适应容器 */
+            position: absolute;
+            bottom: 0;
+            /* 图片底部对齐容器底部 */
+            left: 9%;
+        }
+
+        .prix {
+            padding-left: 2.5em;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .placeholder {
+            min-height: 13%;
+        }
+
+        .margin {
+            margin: -2% 4%;
+        }
+
+        .short {
+            display: none;
+        }
+
+        @media print {
+            body {
+                font-family: 'Poppins', sans-serif !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="labels-container">
+        <div class="section">
+            <div class="half">
+                <div class="chinese"><span id="product-chinese">{{ product['nomchinois'] }}</span></div>
+                <div class="subsection barre rotate">
+                    <div class="left helvetica">
+                        <div class="lot">LOT : {{ product['lot'] }}</div>
+                        <div class="dlc">DLC : <span id="dlc-date"></span></div>
+                    </div>
+                    <div class="right">
+                        <div class="placeholder">
+                            <div id="product-price-container" class="prix helvetica">
+                            </div>
+                        </div>
+                        <div class="codebarre"><img id="product-codebarre" src="{{ product['codebarre'] }}"
+                                alt="Code Barre" /></div>
+                    </div>
+                </div>
+                <div class="contact rotate margin">
+                    <div class="typo"><img
+                            src="https://res.cloudinary.com/laboratoire-calebasse/image/upload/v1729260144/Logo_vert_618e0c7bcc.png" />
+                    </div>
+                    <div class="info">
+                        <div class="adress-space-mail">
+                            <div>15 rue de la Vistule, 75013 Paris</div>
+                            <div> 01 45 85 88 00 </div>
+                            <div>www.calebasse.com</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="subsection marque rotate margin">
+                    <div class="cap title b">Le Laboratoire Calebasse</div>
+
+                    <!-- Cet élément est caché, il stocke juste la valeur de brand -->
+                    <div id="product-brand" style="display: none;">{{ product['brand'] }}</div>
+
+                    <!-- Ici sera injectée la bonne description -->
+                    <div id="product-description" class="info line-height"></div>
+                </div>
+
+
+                <div class="subsection utilisation rotate margin">
+                    <div class="cap title b ">Conseil d'utilisation
+                    </div>
+                    <div class="info helvetica"><span id="product-utilisation">{{ product['utilisation'] }}</span></div>
+                </div>
+                <div class="subsection vertus rotate margin">
+                    <div class="cap title b ">Vertus</div>
+                    <div class="info helvetica"><span id="product-vertus">{{ product['vertus'] }}</span></div>
+                </div>
+                <div class="subsection composition rotate margin">
+                    <div class="cap title b ">Composition</div>
+                    <div class="info helvetica"><span id="product-composition">{{ product['composition'] }}</span></div>
+                </div>
+            </div>
+            <div class="subsection codecouleur" id="product-couleur"
+                style="background-color: {{ product['couleur'] }};">
+                <div class="siteweb b">
+                    <div class="rotate"> </div>
+                </div>
+            </div>
+            <div class="subsection logo">
+                <img src="https://res.cloudinary.com/laboratoire-calebasse/image/upload/v1730111412/Fichier_3_68a574cf12.png"
+                    alt="Logo" />
+            </div>
+            <div class="subsection nom cap"><span id="product-nom">{{ product['nom'] }}</span></div>
+            <div class="subsection effet cap b" id="effet-border" style="color: #5DBD98">
+                <span id="product-effets">{{ product['effets'] }}</span>
+            </div>
+            <div class="subsection poids b" id="poids-bio"><span id="product-poids">{{ product['poids'] }}</span>
+                <img id="bio-image" src="{{ product['bio'] }}" alt="bio image" />
+            </div>
+            <div class="subsection icons">
+                <div class="icon"><img id="icon-1" src="{{ product['icon'] }}" alt="Icon 1" /></div>
+                <div class="icon"><img
+                        src="https://res.cloudinary.com/laboratoire-calebasse/image/upload/v1738682689/vegan_f50bbf335a.png"
+                        alt="Icon 2" />
+                </div>
+                <div class="icon"><img
+                        src="https://res.cloudinary.com/laboratoire-calebasse/image/upload/v1742981718/sans_metaux_lourds_10d5ecd497.png"
+                        alt="Icon 3" />
+                </div>
+                <div class="icon"><img
+                        src="https://res.cloudinary.com/laboratoire-calebasse/image/upload/v1738682686/qualite_pharmacopee_8f6691512d.png"
+                        alt="Icon 4" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        //avoir le DLC
+        function generateDate() {
+            const today = new Date();
+            const futureYear = today.getFullYear() + 3;
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            return `${month}/${futureYear}`;
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            console.log("📢 DOM entièrement chargé");
+
+            // Insérer la DLC dans le HTML
+            const dlcElement = document.getElementById("dlc-date");
+            if (dlcElement) {
+                dlcElement.textContent = generateDate();
+                console.log("✅ DLC insérée :", generateDate());
+            } else {
+                console.error("❌ Erreur : L'élément `#dlc-date` n'existe pas !");
+            }
+
+            // Ajouter un point après le nom du produit si nécessaire
+            const productNameElement = document.getElementById("product-nom");
+            if (productNameElement) {
+                let productName = productNameElement.textContent.trim();
+
+                if (!productName.endsWith('.')) {
+                    productNameElement.textContent = productName + '.';
+                    console.log("✅ Nom du produit mis à jour :", productName + '.');
+                } else {
+                    console.log("✅ Le nom du produit a déjà un point :", productName);
+                }
+            } else {
+                console.error("❌ Erreur : L'élément `#product-nom` n'existe pas !");
+            }
+
+            // Récupérer les éléments
+            const brandElement = document.getElementById("product-brand");
+            const descriptionElement = document.getElementById("product-description");
+
+            if (!brandElement) {
+                console.error("❌ Erreur : L'élément `#product-brand` est introuvable !");
+                return;
+            }
+            if (!descriptionElement) {
+                console.error("❌ Erreur : L'élément `#product-description` est introuvable !");
+                return;
+            }
+
+            // Lire la valeur de `brand` si c'est long, court, mini description
+            const brand = brandElement.textContent.trim().toLowerCase();
+
+            console.log(`🎯 Brand détecté : ${brand}`);
+
+            let longDescription = `
+        Établi à Paris depuis 1997, le Laboratoire Calebasse propose des plantes et compléments alimentaires de qualité.
+        100% naturels, la priorité est donnée à l'efficacité et la sécurité. Des contrôles sont effectués sur chaque lot
+        pour vérifier l'exemption des pesticides et métaux lourds, ainsi que la conformité à la Pharmacopée.
+        Nos formules inspirées de la Médecine Traditionnelle Chinoise et perfectionnées par les études modernes, offrent
+        une synergie équilibrée entre la richesse de la nature et la science moderne.
+    `;
+
+            let shortDescription = `
+        Établi à Paris depuis 1997, le Laboratoire Calebasse propose des plantes et compléments alimentaires de qualité.
+        100% naturels, la priorité est donnée à l'efficacité et la sécurité. Des contrôles sont effectués sur chaque lot
+        pour vérifier l'exemption des pesticides et métaux lourds, ainsi que la conformité à la Pharmacopée.
+    `;
+
+            let miniDescription = `LE LABORATOIRE FRANÇAIS DE LA PHARMACOPÉE CHINOISE DEPUIS 1997
+    `;
+
+            if (brand === "long") {
+                descriptionElement.innerHTML = longDescription;
+                console.log("✅ Description affichée : Longue");
+            } else if (brand === "court") {
+                descriptionElement.innerHTML = shortDescription;
+                console.log("✅ Description affichée : Courte");
+            } else if (brand === "mini") {
+                descriptionElement.innerHTML = miniDescription;
+                console.log("✅ Description affichée : Mini");
+            } else {
+                console.warn("⚠️ Brand inconnu, description par défaut affichée.");
+            }
+        });
+    </script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+</body>
+
+</html>

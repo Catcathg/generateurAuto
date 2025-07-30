@@ -1,0 +1,47 @@
+# 📌 Installation et lancement du projet
+
+## 🛠️ **1. Prérequis : Installer Node.js**
+Avant de commencer, assurez-vous que **Node.js** est installé sur votre ordinateur.
+
+### **🔍 Vérifier si Node.js est installé :**
+Ouvrez un terminal (dans VSCode ou autre) et tapez :
+
+node -v
+npm -v
+
+Si ce n'est pas installé, alors aller ici pour télécharger : https://nodejs.org/zh-cn
+
+# ⚙️ Installation des dépendances
+
+Après avoir installé Node.js, vous devez installer les dépendances du projet.
+Dans le terminal, placez-vous dans le dossier du projet puis exécutez :
+
+npm install
+
+# 🚀  Lancer le projet
+📂 Aller dans le dossier du projet :
+- Ouvrez un terminal et naviguez vers le dossier etiquette (cd etiquette)
+- Ensuite, entrez dans le sous-dossier dossier (cd dossier)
+
+▶️ Exécuter la génération des étiquettes :
+Une fois dans le bon dossier, lancez le script : (node generate.js)
+
+Des instructions apparaîtront dans le terminal. Suivez-les pour générer vos étiquettes.
+
+# 📊 Récupérer les données Google Sheet en JSON
+🔹 1. Modifier les indices pour récupérer des lignes spécifiques
+Dans script.js, modifiez les valeurs suivantes pour sélectionner une plage de lignes :
+(
+    const startIndex = 315; // Première ligne à récupérer (index -1)
+    const endIndex = 343;   // Dernière ligne à récupérer (index +1)
+
+)
+
+🔹 2. Définir un fichier de destination
+Changez le nom du fichier de destination pour éviter d’écraser les données existantes :
+const destinationFile = './dossier/data3.json'; // Changez ici
+
+🔹 3. Assurez-vous que generate.js utilise le bon fichier JSON
+Dans generate.js, mettez à jour le nom du fichier JSON utilisé :
+const products = JSON.parse(fs.readFileSync('data3.json', 'utf8')); // Changez ici si besoin
+
